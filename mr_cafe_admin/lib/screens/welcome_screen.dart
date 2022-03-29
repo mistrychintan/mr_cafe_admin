@@ -39,17 +39,34 @@ class WelcomeScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           hintText: 'Enter Email',
                           prefixIcon: Icon(Icons.email),
-
                           // prefixIconColor: Colors.green,
 
                           focusColor: Colors.black,
                         ),
+                        keyboardType: TextInputType.emailAddress,
                       ),
+                    ),
+                    TextField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: 'Enter Password',
+                        prefixIcon: Icon(Icons.lock),
+                        // prefixIconColor: Colors.green,
+
+                        focusColor: Colors.black,
+                      ),
+                      keyboardType: TextInputType.visiblePassword,
                     ),
                   ],
                 ),
               ),
             ),
+            SizedBox(height: MediaQuery.of(context).size.height * .008),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text('Login'),
+              style: ElevatedButton.styleFrom(primary: Color(0xff632B13)),
+            )
           ],
         ),
       )),
