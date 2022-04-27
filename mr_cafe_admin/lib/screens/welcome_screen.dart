@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mr_cafe_admin/constant.dart';
 
 import 'package:mr_cafe_admin/screens/offers_screen.dart';
 import 'package:mr_cafe_admin/screens/orders_screen.dart';
@@ -74,7 +75,7 @@ class WelcomeScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 18.0),
                 ),
                 style: ElevatedButton.styleFrom(
-                    primary: Color(0xff632B13),
+                    primary: kButtonColor,
                     fixedSize: Size(MediaQuery.of(context).size.width * .5,
                         MediaQuery.of(context).size.height * .05)),
               ),

@@ -21,15 +21,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: kBackgroundColor,
-        appBarTheme: AppBarTheme(
-            backgroundColor: kDarkColor,
-            elevation: 0.0,
-            centerTitle: true,
-            iconTheme: IconThemeData(color: Colors.white)),
-      ),
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: kBackgroundColor,
+          appBarTheme: AppBarTheme(
+              backgroundColor: kBackgroundColor,
+              elevation: 0,
+              toolbarHeight: 60,
+              centerTitle: true,
+              titleTextStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+              iconTheme: IconThemeData(color: Colors.black, size: 25)),
+          buttonTheme: ButtonThemeData(buttonColor: Color(0xFFD4A056))),
       initialRoute: SplashScreen.id,
       routes: {
         SplashScreen.id: (context) => SplashScreen(),
