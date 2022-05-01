@@ -7,9 +7,9 @@ class ItemCard extends StatelessWidget {
     required this.image,
     required this.price,
   }) : super(key: key);
-  final String title;
-  final ImageProvider image;
-  final String price;
+  final String? title;
+  final Image? image;
+  final String? price;
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +37,7 @@ class ItemCard extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image(
-                          image: image,
-                          fit: BoxFit.cover,
-                        ),
+                        child: image,
                       ),
                     ),
                   ),
@@ -59,7 +56,7 @@ class ItemCard extends StatelessWidget {
                               // height: 25,
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: Text(
-                                title,
+                                title!,
                                 style: TextStyle(
                                     fontSize: 20,
                                     color: Colors.white70,

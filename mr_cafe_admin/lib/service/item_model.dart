@@ -1,14 +1,13 @@
-import 'dart:typed_data';
-
 class ItemModel {
-  final Uint8List image;
+  final String image;
   final String itemname;
-  final String category;
+  final String? category;
   final int price;
   final String description;
 
   ItemModel(
       this.image, this.itemname, this.category, this.price, this.description);
+
   ItemModel.fromMap(Map<dynamic, dynamic> res)
       : image = res['image'],
         itemname = res['itemname'],

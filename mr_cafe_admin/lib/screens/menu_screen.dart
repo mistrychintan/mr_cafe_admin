@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:mr_cafe_admin/constant.dart';
 import 'package:mr_cafe_admin/screens/add_category_screen.dart';
 import 'package:mr_cafe_admin/screens/drawer_screen.dart';
+import 'package:mr_cafe_admin/service/database_handler.dart';
+import 'package:mr_cafe_admin/service/image_utility.dart';
+import 'package:mr_cafe_admin/service/item_model.dart';
+import 'package:mr_cafe_admin/widget/itemcard.dart';
 
 class MenuPage extends StatelessWidget {
-  const MenuPage({Key? key}) : super(key: key);
+  MenuPage({Key? key}) : super(key: key);
   static const String id = 'menu_screen';
+  DatabaseHandler databaseHandler = DatabaseHandler();
+
   @override
   Widget build(BuildContext context) {
+    // var data = databaseHandler.getItemList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Menu'),
@@ -105,6 +113,15 @@ class MenuPage extends StatelessWidget {
               ),
             ),
           ),
+          FutureBuilder(
+              // future:data,
+              builder: (context, AsyncSnapshot<ItemModel> snapshot) {
+            return ItemCard(
+              price: snapshot.data!.price.toString(),
+              title: snapshot.data!.itemname,
+              image: Utility.imageFromBase64String(snapshot.data!.image),
+            );
+          }),
         ],
       ),
       floatingActionButton: Padding(

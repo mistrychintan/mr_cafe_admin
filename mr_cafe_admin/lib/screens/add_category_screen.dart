@@ -1,16 +1,12 @@
-import 'dart:convert';
-
 import 'dart:io';
 
-import 'package:mr_cafe_admin/service/database_handler.dart';
-import 'package:mr_cafe_admin/service/item_model.dart';
-import 'package:mr_cafe_admin/service/item_repo.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mr_cafe_admin/constant.dart';
+import 'package:mr_cafe_admin/service/image_utility.dart';
 
-String TABLENAME = 'ITEM';
+import '../service/database_handler.dart';
+import '../service/item_model.dart';
 
 class AddCategory extends StatefulWidget {
   const AddCategory({Key? key}) : super(key: key);
@@ -22,12 +18,14 @@ class AddCategory extends StatefulWidget {
 
 class _AddCategoryState extends State<AddCategory> {
   late var _image;
+  late String itemName;
+  late String image;
+  late String price;
+  late String description;
   bool isKweb = false;
   String? choosevalue;
-  Database? _database;
-  TextEditingController itemnameCotroller = TextEditingController();
-  TextEditingController priceCotroller = TextEditingController();
-  TextEditingController descriptionCotroller = TextEditingController();
+  final DatabaseHandler? _databaseHandler = DatabaseHandler();
+
   getFromGallery() async {
     final XFile? pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
@@ -36,41 +34,14 @@ class _AddCategoryState extends State<AddCategory> {
     );
     setState(() {
       _image = File(pickedFile!.path);
-      print(_image);
+      image = Utility.base64String(_image.readAsBytesSync());
+
       if (_image == null) {
         isKweb = false;
       } else {
         isKweb = true;
       }
     });
-  }
-
-  Future<Database?> openDB() async {
-    _database = await DatabaseHandler().openDB();
-    return _database;
-  }
-
-  Future<ItemModel> insertDB() async {
-    _database = await openDB();
-    ItemRepo itemRepo = ItemRepo();
-    itemRepo.CreateTable(_database);
-
-    ItemModel itemModel = ItemModel(
-        _image.readAsBytesSync(),
-        itemnameCotroller.text,
-        choosevalue!,
-        int.parse(priceCotroller.text),
-        descriptionCotroller.text);
-    await _database?.insert(TABLENAME, itemModel.toMap());
-    // await _database?.close();
-    return itemModel;
-  }
-
-  getDataFromItem() async {
-    _database = await openDB();
-    ItemRepo itemRepo = ItemRepo();
-    await itemRepo.getItem(_database);
-    await _database?.close();
   }
 
   @override
@@ -99,10 +70,7 @@ class _AddCategoryState extends State<AddCategory> {
                 child: isKweb
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.file(
-                          _image,
-                          fit: BoxFit.cover,
-                        ),
+                        child: Utility.imageFromBase64String(image),
                       )
                     : Icon(
                         Icons.add_a_photo_outlined,
@@ -114,7 +82,7 @@ class _AddCategoryState extends State<AddCategory> {
                 onPressed: () {
                   getFromGallery();
                 },
-                child: Text(
+                child: const Text(
                   "Upload Image",
                   style: TextStyle(
                     decoration: TextDecoration.underline,
@@ -123,19 +91,25 @@ class _AddCategoryState extends State<AddCategory> {
                 style: TextButton.styleFrom(shadowColor: kBackgroundColor),
               ),
               TextFormField(
-                controller: itemnameCotroller,
                 decoration:
                     kTextFieldDecoration.copyWith(hintText: "Enter item name"),
+                onChanged: (value) {
+                  setState(() {
+                    itemName = value;
+                  });
+                },
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 15.0, vertical: 10.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: DropdownButton(
                   isExpanded: true,
                   // isDense: true,
-                  hint: Text("Select Category"),
+
+                  hint: const Text("Select Category"),
                   dropdownColor: kBackgroundColor,
                   elevation: 1,
                   borderRadius: BorderRadius.circular(15),
@@ -167,17 +141,25 @@ class _AddCategoryState extends State<AddCategory> {
                 ),
               ),
               TextFormField(
-                controller: priceCotroller,
                 decoration:
                     kTextFieldDecoration.copyWith(hintText: "Enter Price"),
+                onChanged: (value) {
+                  setState(() {
+                    price = value;
+                  });
+                },
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * .02,
               ),
               TextFormField(
-                controller: descriptionCotroller,
                 decoration: kTextFieldDecoration.copyWith(
                     hintText: "Enter item description"),
+                onChanged: (value) {
+                  setState(() {
+                    description = value;
+                  });
+                },
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * .03,
@@ -185,18 +167,27 @@ class _AddCategoryState extends State<AddCategory> {
               ElevatedButton(
                 onPressed: () async {
                   // print(itemnameCotroller.text.runtimeType);
-                  // print(_image);
-                  // var imageBytes = _image.readAsBytesSync();
-                  // print(imageBytes.runtimeType);
+
+                  ItemModel itemModel = ItemModel(image, itemName, choosevalue,
+                      int.parse(price), description);
+
+                  await _databaseHandler!.insert(itemModel);
+                  print(image);
+                  print(itemName);
+                  print(choosevalue);
+                  print(price);
+                  print(description);
+                  // var data = await _databaseHandler!.getItemList();
+                  // print(data);
                   // var strinImage = base64Encode(imageBytes);
                   // print(strinImage);
                   // print(Image.memory(imageBytes).runtimeType);
                   // print((priceCotroller.text).runtimeType);
                   // print(descriptionCotroller.text.runtimeType);
                   // print(choosevalue.runtimeType);
-                  await insertDB();
-                  var data = await getDataFromItem();
-                  print(data);
+                  // await insertDB();
+                  // var data = await _databaseHandler!.getItemList();
+                  // print(data);
                 },
                 child: Text(
                   "Save",
@@ -209,7 +200,7 @@ class _AddCategoryState extends State<AddCategory> {
                       MediaQuery.of(context).size.height * .065),
                   primary: kButtonColor,
                 ),
-              )
+              ),
             ],
           ),
         ),
