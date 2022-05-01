@@ -1,8 +1,16 @@
+import 'dart:convert';
+
 import 'dart:io';
 
+import 'package:mr_cafe_admin/service/database_handler.dart';
+import 'package:mr_cafe_admin/service/item_model.dart';
+import 'package:mr_cafe_admin/service/item_repo.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mr_cafe_admin/constant.dart';
+
+String TABLENAME = 'ITEM';
 
 class AddCategory extends StatefulWidget {
   const AddCategory({Key? key}) : super(key: key);
@@ -16,6 +24,10 @@ class _AddCategoryState extends State<AddCategory> {
   late var _image;
   bool isKweb = false;
   String? choosevalue;
+  Database? _database;
+  TextEditingController itemnameCotroller = TextEditingController();
+  TextEditingController priceCotroller = TextEditingController();
+  TextEditingController descriptionCotroller = TextEditingController();
   getFromGallery() async {
     final XFile? pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
@@ -31,6 +43,34 @@ class _AddCategoryState extends State<AddCategory> {
         isKweb = true;
       }
     });
+  }
+
+  Future<Database?> openDB() async {
+    _database = await DatabaseHandler().openDB();
+    return _database;
+  }
+
+  Future<ItemModel> insertDB() async {
+    _database = await openDB();
+    ItemRepo itemRepo = ItemRepo();
+    itemRepo.CreateTable(_database);
+
+    ItemModel itemModel = ItemModel(
+        _image.readAsBytesSync(),
+        itemnameCotroller.text,
+        choosevalue!,
+        int.parse(priceCotroller.text),
+        descriptionCotroller.text);
+    await _database?.insert(TABLENAME, itemModel.toMap());
+    // await _database?.close();
+    return itemModel;
+  }
+
+  getDataFromItem() async {
+    _database = await openDB();
+    ItemRepo itemRepo = ItemRepo();
+    await itemRepo.getItem(_database);
+    await _database?.close();
   }
 
   @override
@@ -83,6 +123,7 @@ class _AddCategoryState extends State<AddCategory> {
                 style: TextButton.styleFrom(shadowColor: kBackgroundColor),
               ),
               TextFormField(
+                controller: itemnameCotroller,
                 decoration:
                     kTextFieldDecoration.copyWith(hintText: "Enter item name"),
               ),
@@ -99,7 +140,7 @@ class _AddCategoryState extends State<AddCategory> {
                   elevation: 1,
                   borderRadius: BorderRadius.circular(15),
                   iconEnabledColor: Colors.black,
-                  items: [
+                  items: const [
                     DropdownMenuItem(
                       child: Text("Hot Coffee"),
                       value: "Hot Coffe",
@@ -126,14 +167,15 @@ class _AddCategoryState extends State<AddCategory> {
                 ),
               ),
               TextFormField(
+                controller: priceCotroller,
                 decoration:
                     kTextFieldDecoration.copyWith(hintText: "Enter Price"),
-                keyboardType: TextInputType.number,
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * .02,
               ),
               TextFormField(
+                controller: descriptionCotroller,
                 decoration: kTextFieldDecoration.copyWith(
                     hintText: "Enter item description"),
               ),
@@ -141,7 +183,21 @@ class _AddCategoryState extends State<AddCategory> {
                 height: MediaQuery.of(context).size.height * .03,
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  // print(itemnameCotroller.text.runtimeType);
+                  // print(_image);
+                  // var imageBytes = _image.readAsBytesSync();
+                  // print(imageBytes.runtimeType);
+                  // var strinImage = base64Encode(imageBytes);
+                  // print(strinImage);
+                  // print(Image.memory(imageBytes).runtimeType);
+                  // print((priceCotroller.text).runtimeType);
+                  // print(descriptionCotroller.text.runtimeType);
+                  // print(choosevalue.runtimeType);
+                  await insertDB();
+                  var data = await getDataFromItem();
+                  print(data);
+                },
                 child: Text(
                   "Save",
                   style: TextStyle(
