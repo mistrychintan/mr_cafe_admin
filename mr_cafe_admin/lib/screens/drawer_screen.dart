@@ -14,68 +14,70 @@ class DrawerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+        backgroundColor: kBackgroundColor,
         child: ListView(
-      children: [
-        DrawerHeader(
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.contain,
-                image: AssetImage('assets/prifile.png'),
+          children: [
+            DrawerHeader(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.contain,
+                    image: AssetImage('assets/prifile.png'),
+                  ),
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  border: Border.all(width: 1, color: Colors.white),
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 1, color: Colors.black54, spreadRadius: 2)
+                  ],
+                ),
               ),
-              shape: BoxShape.circle,
-              color: Colors.white,
-              border: Border.all(width: 1, color: Colors.white),
-              boxShadow: [
-                BoxShadow(blurRadius: 1, color: Colors.black54, spreadRadius: 2)
-              ],
             ),
-          ),
-        ),
-        Text(
-          'Chintan Mistry',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width * .06,
-          ),
-        ),
-        divider,
-        DrawerList(
-          icon: Icons.app_registration_outlined,
-          title: 'All Orders',
-          onpress: () {
-            Navigator.pushReplacementNamed(context, OrdersPage.id);
-          },
-        ),
-        divider,
-        DrawerList(
-          icon: Icons.list_alt,
-          title: 'Menu',
-          onpress: () {
-            Navigator.pushReplacementNamed(context, MenuPage.id);
-          },
-        ),
-        divider,
-        DrawerList(
-          icon: Icons.local_offer_outlined,
-          title: 'Daily Offers',
-          onpress: () {
-            Navigator.pushReplacementNamed(
-              context,
-              OfferScreen.id,
-            );
-          },
-        ),
-        divider,
-        DrawerList(
-          icon: Icons.settings,
-          title: 'Setting',
-          onpress: () {
-            Navigator.pushReplacementNamed(context, SettingPage.id);
-          },
-        ),
-      ],
-    )
+            Text(
+              'Chintan Mistry',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * .06,
+              ),
+            ),
+            divider,
+            DrawerList(
+              icon: Icons.app_registration_outlined,
+              title: 'All Orders',
+              onpress: () {
+                Navigator.pushReplacementNamed(context, OrdersPage.id);
+              },
+            ),
+            divider,
+            DrawerList(
+              icon: Icons.list_alt,
+              title: 'Menu',
+              onpress: () {
+                Navigator.pushReplacementNamed(context, MenuPage.id);
+              },
+            ),
+            divider,
+            DrawerList(
+              icon: Icons.local_offer_outlined,
+              title: 'Daily Offers',
+              onpress: () {
+                Navigator.pushReplacementNamed(
+                  context,
+                  OfferScreen.id,
+                );
+              },
+            ),
+            divider,
+            DrawerList(
+              icon: Icons.settings,
+              title: 'Setting',
+              onpress: () {
+                Navigator.pushReplacementNamed(context, SettingPage.id);
+              },
+            ),
+          ],
+        )
         // child: Container(
         //   width: MediaQuery.of(context).size.width * .7,
         //   color: kBackgroundColor,

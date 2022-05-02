@@ -24,7 +24,7 @@ class _AddCategoryState extends State<AddCategory> {
   late String description;
   bool isKweb = false;
   String? choosevalue;
-  final DatabaseHandler? _databaseHandler = DatabaseHandler();
+  final DatabaseHandler _databaseHandler = DatabaseHandler();
 
   getFromGallery() async {
     final XFile? pickedFile = await ImagePicker().pickImage(
@@ -171,7 +171,7 @@ class _AddCategoryState extends State<AddCategory> {
                   ItemModel itemModel = ItemModel(image, itemName, choosevalue,
                       int.parse(price), description);
 
-                  await _databaseHandler!.insert(itemModel);
+                  await _databaseHandler.insert(itemModel);
                   print(image);
                   print(itemName);
                   print(choosevalue);

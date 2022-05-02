@@ -33,7 +33,7 @@ class DatabaseHandler {
 
   Future<List<ItemModel>> getItemList() async {
     var dbClient = await db;
-    final List<Map<String, Object?>> queryResult =
+    final List<Map<String, dynamic>> queryResult =
         await dbClient!.query('item');
     return queryResult.map((e) => ItemModel.fromMap(e)).toList();
   }
