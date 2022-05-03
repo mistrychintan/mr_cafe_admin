@@ -20,6 +20,8 @@ class ItemCard extends StatelessWidget {
               const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
           child: GestureDetector(
             child: Container(
+              height: 150,
+              width: 150,
               decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   color: Color(0xFF212325)),

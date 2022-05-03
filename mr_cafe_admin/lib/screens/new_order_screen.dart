@@ -1,10 +1,9 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:mr_cafe_admin/constant.dart';
 
-List qty = ['2', '5', '2', 'ffs', '450', '46', '545'];
-List price = ['90', '175', '540', '45', '465', '455', '485'];
-List item = [
+List _qty = ['2', '5', '2', 'ffs', '450', '46', '545'];
+List _price = ['90', '175', '540', '45', '465', '455', '485'];
+List _item = [
   'hot coffee',
   'ice coffee',
   'green tea',
@@ -117,15 +116,15 @@ class MiddelBody extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.1,
       child: ListView.builder(
-        itemCount: item.length,
+        itemCount: _item.length,
         itemBuilder: (context, index) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Expanded(child: Text(item[index])),
-              Expanded(child: Text("Qty: ${qty[index]}")),
-              Expanded(child: Text("Total: ${price[index]}"))
+              Expanded(child: Text(_item[index])),
+              Expanded(child: Text("Qty: ${_qty[index]}")),
+              Expanded(child: Text("Total: ${_price[index]}"))
             ],
           );
         },

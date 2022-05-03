@@ -1,12 +1,16 @@
 class ItemModel {
-  final String image;
-  final String itemname;
+  final String? image;
+  final String? itemname;
   final String? category;
-  final int price;
-  final String description;
+  final int? price;
+  final String? description;
 
   ItemModel(
-      this.image, this.itemname, this.category, this.price, this.description);
+      {required this.itemname,
+      required this.category,
+      required this.price,
+      required this.description,
+      required this.image});
 
   ItemModel.fromMap(Map<dynamic, dynamic> res)
       : image = res['image'],
@@ -17,7 +21,7 @@ class ItemModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'image': image,
+      // 'image': image,
       'itemname': itemname,
       'category': category,
       'price': price,

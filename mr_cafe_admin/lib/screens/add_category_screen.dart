@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mr_cafe_admin/constant.dart';
+import 'package:mr_cafe_admin/screens/menu_screen.dart';
 import 'package:mr_cafe_admin/service/image_utility.dart';
-
+import 'package:sqflite/sqflite.dart';
 import '../service/database_handler.dart';
 import '../service/item_model.dart';
+
+late List<ItemModel> ITEMLIST = [];
 
 class AddCategory extends StatefulWidget {
   const AddCategory({Key? key}) : super(key: key);
@@ -24,8 +27,8 @@ class _AddCategoryState extends State<AddCategory> {
   late String description;
   bool isKweb = false;
   String? choosevalue;
-  final DatabaseHandler _databaseHandler = DatabaseHandler();
 
+  Database? database;
   getFromGallery() async {
     final XFile? pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
@@ -43,6 +46,33 @@ class _AddCategoryState extends State<AddCategory> {
       }
     });
   }
+
+  Future<Database?> openDB() async {
+    database = await DatabaseHandler().openDB();
+    return database;
+  }
+
+  Future inserDB() async {
+    database = await openDB();
+    DatabaseHandler().createTable(database);
+    await database?.insert(
+        'item',
+        ItemModel(
+          itemname: itemName,
+          category: choosevalue,
+          price: int.parse(price),
+          description: description,
+          image: image,
+        ).toMap());
+    await database!.close();
+  }
+
+  // Future getFromItem() async {
+  //   database = await openDB();
+  //   ITEMLIST = await DatabaseHandler().getItem(database);
+  //   print(ITEMLIST);
+  //   // await _database!.close();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -168,15 +198,25 @@ class _AddCategoryState extends State<AddCategory> {
                 onPressed: () async {
                   // print(itemnameCotroller.text.runtimeType);
 
-                  ItemModel itemModel = ItemModel(image, itemName, choosevalue,
-                      int.parse(price), description);
+                  // ItemModel itemModel = ItemModel(
+                  //     itemName, choosevalue, int.parse(price), description);
+                  await inserDB();
 
-                  await _databaseHandler.insert(itemModel);
-                  print(image);
-                  print(itemName);
-                  print(choosevalue);
-                  print(price);
-                  print(description);
+                  Navigator.pushReplacementNamed(context, MenuPage.id);
+                  // _databaseHandler
+                  //     .insert(ItemModel(
+                  //         image: image,
+                  //         itemname: itemName,
+                  //         category: choosevalue,
+                  //         price: int.parse(price),
+                  //         description: description))
+                  //     .then((value) => print("Item is added"));
+                  // print(image);
+                  // print(itemName);
+                  // print(choosevalue);
+                  // print(price);
+                  // print(description);
+                  // Navigator.pushReplacementNamed(context, MenuPage.id);
                   // var data = await _databaseHandler!.getItemList();
                   // print(data);
                   // var strinImage = base64Encode(imageBytes);
