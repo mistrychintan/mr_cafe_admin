@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mr_cafe_admin/constant.dart';
 
-List _qty = ['2', '5', '2', 'ffs', '450', '46', '545'];
-List _price = ['90', '175', '540', '45', '465', '455', '485'];
-List _item = [
+List qty = ['2', '5', '2', 'ffs', '450', '46', '545'];
+List price = ['90', '175', '540', '45', '465', '455', '485'];
+List item = [
   'hot coffee',
   'ice coffee',
   'green tea',
@@ -33,21 +33,37 @@ class NewOrderScreen extends StatelessWidget {
                   UperBody(),
                   MiddelBody(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(top: 10),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: Text(
+                            "View Details",
+                            style: TextStyle(color: kDarkColor),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              primary: kBackgroundColor,
+                              side: BorderSide(color: kDarkColor)),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0, top: 10),
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.redAccent),
                             onPressed: () {},
                             child: Text("cancle order")),
                       ),
-                      ElevatedButton(
-                          style:
-                              ElevatedButton.styleFrom(primary: Colors.green),
-                          onPressed: () {},
-                          child: Text("Acept order")),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0, top: 10),
+                        child: ElevatedButton(
+                            style:
+                                ElevatedButton.styleFrom(primary: Colors.green),
+                            onPressed: () {},
+                            child: Text("Acept order")),
+                      ),
                     ],
                   ),
                 ],
@@ -116,15 +132,15 @@ class MiddelBody extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.1,
       child: ListView.builder(
-        itemCount: _item.length,
+        itemCount: item.length,
         itemBuilder: (context, index) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Expanded(child: Text(_item[index])),
-              Expanded(child: Text("Qty: ${_qty[index]}")),
-              Expanded(child: Text("Total: ${_price[index]}"))
+              Expanded(child: Text(item[index])),
+              Expanded(child: Text("Qty: ${qty[index]}")),
+              Expanded(child: Text("Total: ${price[index]}"))
             ],
           );
         },
