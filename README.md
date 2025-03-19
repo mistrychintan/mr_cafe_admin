@@ -25,5 +25,5 @@ Mr. Cafe is an online food ordering application built using the Flutter framewor
 
 ### Steps:
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/mistrychintan/mr_cafe_admin.git
+   ```sh
+   git clone :https://github.com/mistrychintan/mr_cafe_admin.git
